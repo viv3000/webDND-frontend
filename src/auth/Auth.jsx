@@ -34,10 +34,8 @@ export default ({setToken}) => {
 					<p>Password</p>
 					<input type="password" name="password" onChange={e => setPassword(e.target.value)}/>
 				</label>
-				<div>
-					<br/>
-					<button type="submit">Log in</button>
-				</div>
+				<button type="submit">Log in</button>
+				<button type="button" onClick={() => setToken(null)}>Log out</button>
 			</form>
 		</>
 	)
