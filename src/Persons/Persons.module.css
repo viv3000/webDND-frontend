@@ -1,0 +1,4 @@
+.Persons{
+	display: flex;
+	flex-diection: row;
+}
