@@ -13,7 +13,7 @@ import './App.css'
 import styles from './App.module.css'
 
 export default () => {
-	const [token, setToken] = useState("ae25917ba4d6a4667f0cefbdcc4438052c945156")
+	const [token, setToken] = useState("178e57618f4d94940b7a9772377ea192d021fe0a")
 	useEffect(() => { }, [])
 
 	return (
@@ -22,8 +22,8 @@ export default () => {
 				<div className={styles.Body}>
 					<Head className={styles.Head} token={token} />
 					<Routes>
-						<Route path="/auth" element={<Auth setToken={setToken} />} />
-						<Route path="/persons" element={<Persons token={token} />} />
+						<Route path="/auth/*" element={<Auth setToken={setToken} />} />
+						<Route path="/persons/*" element={<Persons token={token} />} />
 					</Routes>
 				</div>
 			</Router>

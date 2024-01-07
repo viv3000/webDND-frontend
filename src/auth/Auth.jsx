@@ -1,27 +1,23 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react'
+import getToken from '../api/getToken.js'
 
-var backendServer = "http://127.0.0.1:8000";
-
-var getToken = async (login, password) => {
-	return fetch(backendServer+"/api-token-auth/", {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded'
-		},
-		body: "username="+login+"&password="+password
-
-	}).then(data => data.json()).then(data => data.token);
-}
+import {errorAlert, successAlert} from '../alert.js'
 
 export default ({setToken}) => {
-	const [login, setLogin] = useState();
-	const [password, setPassword] = useState();
+	const [login, setLogin] = useState()
+	const [password, setPassword] = useState()
 
 	const handleSubmit = async e => {
-		e.preventDefault();
-		getToken(login, password).then(e=>setToken(e));
+		e.preventDefault()
+		getToken(login, password).then(e=>{
+			if(e==undefined){
+				errorAlert("Не верные логин или пароль!")
+			}else{
+				successAlert("Успешный вход!")
+				setToken(e)
+			}
+		})
 	}
-
 
 	return (
 		<>

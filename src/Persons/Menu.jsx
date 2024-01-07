@@ -18,7 +18,8 @@ export default ({token}) => {
 
 	return (
 		<div className={styles.TopMenu}>
-			<MenuItem     text="Добавить"    path="/Persons/Add"/>
+			<MenuItem     text="Список"      path="/persons/list"/>
+			<MenuItem     text="Добавить"    path="/persons/add"/>
 		</div>
 	)
 }

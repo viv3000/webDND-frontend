@@ -1,17 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 
-let backendServer = 'http://127.0.0.1:8000'
-
-let getPersons = (token) => {
-	return fetch(backendServer+"/api/CharLists/", {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Authorization': 'Token '+token
-		},
-	}).then(data => data.json());
-}
+import getPersons from '../api/getPersons.js'
 
 let PersonCard = ({name, description}) => {
 	return (
@@ -27,10 +17,9 @@ let PersonCard = ({name, description}) => {
 
 export default ({token}) => {
 	const [persons, setPersons] = useState();
-	let PersonLists;
 
 	useEffect(() => {
-		getPersons(token).then(data=>setPersons(data))
+		getPersons(token).then(data=>{setPersons(data); console.log(data);})
 	}, [])
 
 	return (
