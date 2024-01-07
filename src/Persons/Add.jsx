@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import getToken from '../api/getToken.js'
-import getGameClass from '../api/getGameClass.js'
+import {getGameClass, getRaceClass, getBackgrounds} from '../api/gets.js'
 
 import {errorAlert, successAlert} from '../alert.js'
 
@@ -8,6 +8,22 @@ import {TextInput, Dropdown} from '../Forms/Elements.jsx'
 
 let setPerson = async () => {
 	return undefined;
+}
+
+let createDisclousureApiDictLambda = (getApi, setFunc) => {
+	return ()=>{
+		let dict = new Array();
+		getApi().then(data=>{
+			data.map(e=>
+				dict.push({
+					key:e.id,
+					text:e.title,
+					description:e.description
+				})
+			)
+			setFunc(dict)
+		})
+	}
 }
 
 export default ({token}) => {
@@ -25,6 +41,8 @@ export default ({token}) => {
 	const [charisma, setCharisma] = useState()
 
 	const [gameClasses, setGameClasses] = useState([]);
+	const [gameRaces, setGameRaces] = useState([]);
+	const [backgrounds, setBackgrounds] = useState([]);
 
 	const handleSubmit = async e => {
 		e.preventDefault()
@@ -37,31 +55,21 @@ export default ({token}) => {
 		})
 	}
 
-	useEffect(()=>{
-		let dict = new Array();
-		getGameClass().then(data=>{
-			data.map(e=>
-				dict.push({
-					key:e.id,
-					text:e.title,
-					description:e.description
-				})
-			)
-			setGameClasses(dict)
-		})
-	},[])
+	useEffect(createDisclousureApiDictLambda(getGameClass, setGameClasses),[])
+	useEffect(createDisclousureApiDictLambda(getRaceClass, setGameRaces),[])
+	useEffect(createDisclousureApiDictLambda(getBackgrounds, setBackgrounds),[])
 
-	let classDict      = gameClasses;
-	let raceDict       = [{key:"1", text:"Человек"}, {key:"2", text:"Нелюдь"} ]
-	let backgroundDict = [{key:"1", text:"Ровный"}, {key:"2", text:"Попущенный"} ]
+	let classDict      = gameClasses
+	let raceDict       = gameRaces
+	let backgroundDict = backgrounds
 
 	return (
 		<>
 			<form onSubmit={handleSubmit}>
 				<TextInput text="Имя"          name="name"           setFunc={setName} />
 				<TextInput text="Описание"     name="description"    setFunc={setDescription} />
-				<Dropdown  text="Класс"        dict={classDict} setFunc={setGameClass} />
-				<Dropdown  text="Раса"         dict={raceDict} setFunc={setRace} />
+				<Dropdown  text="Класс"        dict={classDict}      setFunc={setGameClass} />
+				<Dropdown  text="Раса"         dict={raceDict}       setFunc={setRace} />
 				<Dropdown  text="Предыстория"  dict={backgroundDict} setFunc={setBackground} />
 				<TextInput text="Сила"         name="strength"       setFunc={setStrength} />
 				<TextInput text="Ловкость"     name="dexterity"      setFunc={setDexterity} />
