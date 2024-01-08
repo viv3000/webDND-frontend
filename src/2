@@ -1,0 +1,34 @@
+.gridWrapper{
+	font-size: 5pt;
+	display: grid;
+	grid-template-rows: 1fr 5fr;
+}
+
+.headGridWrapper{
+	display: grid;
+	grid-template-columns: 200px auto;
+	gap: 10px;
+}
+
+.headerInformationGridWrapper{
+	display: grid;
+	grid-template-columns: minmax(100px, 1fr) minmax(100px, 1fr);
+	gap: 10px;
+}
+
+.bodyGridWrapper{
+	display: grid;
+	grid-template-rows: 1fr 5fr;
+}
+
+textarea{
+	resize: vertical;
+	width: 100%;
+	height:20pt;
+}
+
+
+.num label input{
+	width: 40px
+}
+

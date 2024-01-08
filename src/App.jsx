@@ -21,10 +21,12 @@ export default () => {
 			<Router>
 				<div className={styles.Body}>
 					<Head className={styles.Head} token={token} />
-					<Routes>
-						<Route path="/auth/*" element={<Auth setToken={setToken} />} />
-						<Route path="/persons/*" element={<Persons token={token} />} />
-					</Routes>
+					<div className={styles.content}>
+						<Routes>
+							<Route path="/auth/*" element={<Auth setToken={setToken} />} />
+							<Route path="/persons/*" element={<Persons token={token} />} />
+						</Routes>
+					</div>
 				</div>
 			</Router>
 		</>

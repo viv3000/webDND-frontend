@@ -1,0 +1,41 @@
+.gridWrapper{
+	font-size: 5pt;
+	display: grid;
+	grid-template-rows: 100px 1fr;
+}
+
+.headGridWrapper{
+	display: grid;
+	grid-template-columns: 200px auto;
+	gap: 10px;
+}
+
+.headerInformationGridWrapper{
+	display: grid;
+	grid-template-columns: minmax(100px, 1fr) minmax(100px, 1fr);
+	gap: 10px;
+}
+
+.bodyGridWrapper{
+	display: grid;
+	grid-template-rows: auto 1fr;
+}
+
+.bodyCharacteristicsGridWrapper{
+	
+}
+
+textarea{
+	resize: vertical;
+	width: 100%;
+	font-size: 20pt;
+	min-height: 100pt;
+	max-height: 500pt;
+	height: 100pt;
+}
+
+
+.num label input{
+	width: 40px
+}
+

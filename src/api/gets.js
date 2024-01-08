@@ -12,5 +12,9 @@ let getBackgrounds = async () => {
 	return await fetch (server+"/api/CharLists/Backgrounds").then(e=>e.json());
 }
 
+let getAlignments = async () => {
+	return await fetch (server+"/api/CharLists/Alignments").then(e=>e.json());
+}
 
-export {getGameClass, getRaceClass, getBackgrounds}
+
+export {getGameClass, getRaceClass, getBackgrounds, getAlignments}

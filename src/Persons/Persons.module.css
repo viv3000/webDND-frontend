@@ -2,3 +2,14 @@
 	display: flex;
 	flex-diection: row;
 }
+
+.content{
+	background: white;
+	color: black;
+	padding: 10px;
+	margin-right: 50px;
+}
+
+.Menu{
+	width: 140px;
+}

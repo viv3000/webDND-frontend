@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react'
-import getToken from '../api/getToken.js'
-import {getGameClass, getRaceClass, getBackgrounds} from '../api/gets.js'
+
+import {getGameClass, getRaceClass, getBackgrounds, getAlignments} from '../api/gets.js'
+import addPerson from '../api/addPerson.js'
 
 import {errorAlert, successAlert} from '../alert.js'
 
-import {TextInput, Dropdown} from '../Forms/Elements.jsx'
+import {TextInputRequired, NumberInputRequired, Dropdown, TextAreaInputRequired} from '../Forms/Elements.jsx'
 
-let setPerson = async () => {
-	return undefined;
-}
+import styles from './Add.module.css'
 
 let createDisclousureApiDictLambda = (getApi, setFunc) => {
 	return ()=>{
@@ -39,15 +38,25 @@ export default ({token}) => {
 	const [intelegency, setIntelegency] = useState()
 	const [wisdom, setWisdom] = useState()
 	const [charisma, setCharisma] = useState()
+	const [img, setImg] = useState()
 
 	const [gameClasses, setGameClasses] = useState([]);
 	const [gameRaces, setGameRaces] = useState([]);
 	const [backgrounds, setBackgrounds] = useState([]);
+	const [alignments, setAlignments] = useState([]);
 
 	const handleSubmit = async e => {
 		e.preventDefault()
-		setPerson(login, password).then(e=>{
-			if(e==undefined){
+		addPerson(
+			token, 
+			name, description, 
+			strength, dexterity, constitution, intelegency, wisdom, charisma, 
+			gameClass, race,
+			background,
+			alignment,
+			img
+		).then(e=>{
+			if(e.ok=='False'){
 				errorAlert("Что то пошло не так!\nОбратитесь к богу!")
 			}else{
 				successAlert("Персонаж создан!")
@@ -58,25 +67,38 @@ export default ({token}) => {
 	useEffect(createDisclousureApiDictLambda(getGameClass, setGameClasses),[])
 	useEffect(createDisclousureApiDictLambda(getRaceClass, setGameRaces),[])
 	useEffect(createDisclousureApiDictLambda(getBackgrounds, setBackgrounds),[])
+	useEffect(createDisclousureApiDictLambda(getAlignments, setAlignments),[])
 
 	let classDict      = gameClasses
 	let raceDict       = gameRaces
 	let backgroundDict = backgrounds
+	let alignmentsDict = alignments
 
 	return (
 		<>
-			<form onSubmit={handleSubmit}>
-				<TextInput text="Имя"          name="name"           setFunc={setName} />
-				<TextInput text="Описание"     name="description"    setFunc={setDescription} />
-				<Dropdown  text="Класс"        dict={classDict}      setFunc={setGameClass} />
-				<Dropdown  text="Раса"         dict={raceDict}       setFunc={setRace} />
-				<Dropdown  text="Предыстория"  dict={backgroundDict} setFunc={setBackground} />
-				<TextInput text="Сила"         name="strength"       setFunc={setStrength} />
-				<TextInput text="Ловкость"     name="dexterity"      setFunc={setDexterity} />
-				<TextInput text="Телосложение" name="constitution"   setFunc={setConstitution} />
-				<TextInput text="Интелект"     name="intelegency"    setFunc={setIntelegency} />
-				<TextInput text="Мудрость"     name="wisdom"         setFunc={setWisdom} />
-				<TextInput text="Харизма"      name="charisma"       setFunc={setCharisma} />
+			<form onSubmit={handleSubmit} className={styles.form}>
+				<div className={styles.gridWrapper}>
+					<div className={styles.headGridWrapper}>
+						<TextInputRequired text="Имя" name="name" setFunc={setName} className={styles.name} />
+						<div className={styles.headerInformationGridWrapper}>
+							<Dropdown text="Класс"        dict={classDict}      setFunc={setGameClass}  className={styles.gameClass} />
+							<Dropdown text="Предыстория"  dict={backgroundDict} setFunc={setBackground} className={styles.background} />
+							<Dropdown text="Раса"         dict={raceDict}       setFunc={setRace}       className={styles.race} />
+							<Dropdown text="Мировозрение" dict={alignmentsDict} setFunc={setAlignment}  className={styles.alignment} />
+						</div>
+					</div>
+					<div className={styles.bodyGridWrapper}>
+						<TextAreaInputRequired   text="Описание"     name="description"    setFunc={setDescription}  className={styles.num} />
+						<div className={styles.bodyCharacteristicsGridWrapper}>
+							<NumberInputRequired text="Сила"         name="strength"       setFunc={setStrength}     className={styles.num} />
+							<NumberInputRequired text="Ловкость"     name="dexterity"      setFunc={setDexterity}    className={styles.num} />
+							<NumberInputRequired text="Телосложение" name="constitution"   setFunc={setConstitution} className={styles.num} />
+							<NumberInputRequired text="Интелект"     name="intelegency"    setFunc={setIntelegency}  className={styles.num} />
+							<NumberInputRequired text="Мудрость"     name="wisdom"         setFunc={setWisdom}       className={styles.num} />
+							<NumberInputRequired text="Харизма"      name="charisma"       setFunc={setCharisma}     className={styles.num} />
+						</div>
+					</div>
+				</div>
 				<br/>
 				<br/>
 				<button type="submit">Добавить</button>
@@ -84,3 +106,4 @@ export default ({token}) => {
 		</>
 	)
 }
+

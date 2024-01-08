@@ -14,12 +14,16 @@ import styles from './Persons.module.css'
 export default ({token}) => {
 	return (
 		<div className={styles.Persons}>
-			<PersonsMenu token={token} />
-			<Routes>
-				<Route path=""      element={<PersonsContent token={token}/>} />
-				<Route path="list"  element={<PersonsContent token={token}/>} />
-				<Route path="add/*" element={<PersonAdd token={token} />} />
-			</Routes>
+			<div className={styles.Menu}>
+				<PersonsMenu token={token}/>
+			</div>
+			<div className={styles.content}>
+				<Routes>
+					<Route path=""      element={<PersonsContent token={token}/>} />
+					<Route path="list"  element={<PersonsContent token={token}/>} />
+					<Route path="add/*" element={<PersonAdd token={token} />} />
+				</Routes>
+			</div>
 		</div>
 	)
 
