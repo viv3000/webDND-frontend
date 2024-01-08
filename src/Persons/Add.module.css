@@ -22,13 +22,18 @@
 }
 
 .bodyCharacteristicsGridWrapper{
-	
+	display: grid;
+}
+
+.bodyNoDescription{
+	display: grid;
+	grid-template-columns: 150px 1fr;
 }
 
 textarea{
 	resize: vertical;
 	width: 100%;
-	font-size: 20pt;
+	font-size: 10pt;
 	min-height: 100pt;
 	max-height: 500pt;
 	height: 100pt;
@@ -39,3 +44,7 @@ textarea{
 	width: 40px
 }
 
+.Img{
+	display: flex;
+	flex-direction: column;
+}

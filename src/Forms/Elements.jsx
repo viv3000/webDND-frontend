@@ -1,7 +1,21 @@
 import React from 'react'
+import {useState} from 'react'
 import styles from './elements.module.css'
 import InputNumber from 'react-input-number'
 
+let ImgInput = ({text, name, setFunc}) => {
+	return (
+		<>
+			<label>
+				<p>{text}</p>
+				<input
+					type="file"
+					name={name}
+					onChange={e => setFunc(URL.createObjectURL(e.target.files[0]))} />
+			</label>
+		</>
+	)
+}
 let TextInput = ({text, name, setFunc}) => {
 	return (
 		<>
@@ -24,6 +38,7 @@ let TextAreaInputRequired = ({text, name, setFunc}) => {
 				<p>{text}</p>
 				<textarea
 					required
+					rows="10"
 					type="text"
 					name={name}
 					onChange={e => setFunc(e.target.value)} />
@@ -48,17 +63,25 @@ let TextInputRequired = ({text, name, setFunc}) => {
 	)
 }
 
-let NumberInputRequired = ({text, name, setFunc}) => {
+let CharacteristicInputRequired = ({text, name, defaultValue, setFunc}) => {
+	const [value, setValue] = useState();
 	return (
 		<>			
 			<label className={styles.inp}>
 				<input
+					required
+					className={styles.inpCharacteristic}
 					name={name}
+					value={defaultValue}
 					onKeyDown={(event) => {
-						console.log(event.key)
-						if (!/[0-9]/.test(event.key) && event.key!="Backspace") event.preventDefault();
+						console.log(parseInt(value*10) + parseInt(event.key))
+						if (!/[0-9]/.test(event.key)  && event.key!="Backspace" && event.key!="Tab") event.preventDefault();
+						else if ((parseInt(value*10) + parseInt(event.key)) > 20) event.preventDefault();
 					}}
-					onChange={e => setFunc(e.target.value)} />
+					onChange={e => {
+						setFunc(e.target.value) 
+						setValue(e.target.value)
+					}} />
 				<span className={styles.label}>{text}</span>
 				<span className={styles.focusBg}></span>
 			</label>
@@ -88,4 +111,4 @@ let Dropdown = ({text, dict, setFunc}) => {
 }
 
 
-export {TextInput, TextInputRequired, NumberInputRequired, Dropdown, TextAreaInputRequired}
+export {TextInput, TextInputRequired, CharacteristicInputRequired, Dropdown, TextAreaInputRequired, ImgInput}

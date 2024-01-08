@@ -5,7 +5,7 @@ import addPerson from '../api/addPerson.js'
 
 import {errorAlert, successAlert} from '../alert.js'
 
-import {TextInputRequired, NumberInputRequired, Dropdown, TextAreaInputRequired} from '../Forms/Elements.jsx'
+import {TextInputRequired, CharacteristicInputRequired, Dropdown, TextAreaInputRequired, ImgInput} from '../Forms/Elements.jsx'
 
 import styles from './Add.module.css'
 
@@ -25,6 +25,51 @@ let createDisclousureApiDictLambda = (getApi, setFunc) => {
 	}
 }
 
+let Characteristics = ({
+	strength, dexterity, constitution, intelegency, wisdom, charisma,
+	setStrength, setDexterity, setConstitution, setIntelegency, setWisdom, setCharisma
+	}) => {
+	return(
+		<div className={styles.bodyCharacteristicsGridWrapper}>
+			<CharacteristicInputRequired 
+					defaultValue={strength} text="Сила"
+					name="strength"
+					setFunc={setStrength}
+					className={styles.num} />
+			<CharacteristicInputRequired
+					defaultValue={dexterity} 
+					text="Ловкость"
+					name="dexterity"
+					setFunc={setDexterity}
+					className={styles.num} />
+			<CharacteristicInputRequired
+					defaultValue={constitution} 
+					text="Телосложение"
+					name="constitution"
+					setFunc={setConstitution}
+					className={styles.num} />
+			<CharacteristicInputRequired
+					defaultValue={intelegency}
+					text="Интелект"
+					name="intelegency"
+					setFunc={setIntelegency}
+					className={styles.num} />
+			<CharacteristicInputRequired 
+					defaultValue={wisdom}
+					text="Мудрость"
+					name="wisdom"
+					setFunc={setWisdom}
+					className={styles.num} />
+			<CharacteristicInputRequired
+					defaultValue={charisma}
+					text="Харизма"
+					name="charisma"
+					setFunc={setCharisma}
+					className={styles.num} />
+		</div>
+	)
+}
+
 export default ({token}) => {
 	const [name, setName] = useState()
 	const [description, setDescription] = useState()
@@ -32,13 +77,15 @@ export default ({token}) => {
 	const [gameClass, setGameClass] = useState()
 	const [background, setBackground] = useState()
 	const [alignment, setAlignment] = useState()
-	const [strength, setStrength] = useState()
-	const [dexterity, setDexterity] = useState()
-	const [constitution, setConstitution] = useState()
-	const [intelegency, setIntelegency] = useState()
-	const [wisdom, setWisdom] = useState()
-	const [charisma, setCharisma] = useState()
-	const [img, setImg] = useState()
+
+	const [strength,     setStrength]     = useState(8)
+	const [dexterity,    setDexterity]    = useState(8)
+	const [constitution, setConstitution] = useState(8)
+	const [intelegency,  setIntelegency]  = useState(8)
+	const [wisdom,       setWisdom]       = useState(8)
+	const [charisma,     setCharisma]     = useState(8)
+
+	const [img, setImg] = useState(null)
 
 	const [gameClasses, setGameClasses] = useState([]);
 	const [gameRaces, setGameRaces] = useState([]);
@@ -89,13 +136,17 @@ export default ({token}) => {
 					</div>
 					<div className={styles.bodyGridWrapper}>
 						<TextAreaInputRequired   text="Описание"     name="description"    setFunc={setDescription}  className={styles.num} />
-						<div className={styles.bodyCharacteristicsGridWrapper}>
-							<NumberInputRequired text="Сила"         name="strength"       setFunc={setStrength}     className={styles.num} />
-							<NumberInputRequired text="Ловкость"     name="dexterity"      setFunc={setDexterity}    className={styles.num} />
-							<NumberInputRequired text="Телосложение" name="constitution"   setFunc={setConstitution} className={styles.num} />
-							<NumberInputRequired text="Интелект"     name="intelegency"    setFunc={setIntelegency}  className={styles.num} />
-							<NumberInputRequired text="Мудрость"     name="wisdom"         setFunc={setWisdom}       className={styles.num} />
-							<NumberInputRequired text="Харизма"      name="charisma"       setFunc={setCharisma}     className={styles.num} />
+						<div className={styles.bodyNoDescription}>
+							<Characteristics
+								strength={strength} dexterity={dexterity} constitution={constitution} intelegency={intelegency} wisdom={wisdom} charisma={charisma}
+								setStrength={setStrength} setDexterity={setDexterity} setConstitution={setConstitution} setIntelegency={setIntelegency} setWisdom={setWisdom} setCharisma={setCharisma} />
+							<div className={styles.Img}>
+								<ImgInput text="Изображение" name="img" setFunc={setImg} className={styles.ImgInput} />
+								{
+									img &&
+									<img src={img} />
+								}
+							</div>
 						</div>
 					</div>
 				</div>
