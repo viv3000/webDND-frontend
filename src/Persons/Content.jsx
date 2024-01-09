@@ -8,19 +8,19 @@ import styles from './Content.module.css'
 import getPersons from '../api/getPersons.js'
 
 import Alignment from '../assets/alignments/alignment.jsx'
+import GameClass from '../assets/classes/class.jsx'
 
 let PersonCard = ({person}) => {
-	console.log("---------------------------------------------------------");
-	console.log(person);
 	return (
-		<a href="" className={styles.PersonCard}>
+		<Link to={"/persons/"+person.id} className={styles.PersonCard}>
 			<img src={server+person.img} />
 			<h3>{person.name}</h3>
 			<span>{person.description}</span>
 			<div className={styles.StatusBar}>
-				<Alignment number={person.alignment-1} title={person.alignment} />
+				<Alignment number={person.alignment-1}/>
+				<GameClass number={person.gameClassMain-1}/>
 			</div>
-		</a>
+		</Link>
 	)
 }
 

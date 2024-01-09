@@ -2,6 +2,7 @@ import {server} from './settings.js'
 import axios from "axios";
 
 export default async (
+	id,
 	token, 
 	name, description, 
 	strength, dexterity, constitution, intelegency, wisdom, charisma, 
@@ -26,7 +27,7 @@ export default async (
 	img.data && data.append("img", img.data)
 	return axios({
 		method: 'POST',
-		url: `${server}/api/CharLists/Add`,
+		url: `${server}/api/CharLists/Update/${id}`,
 		headers: {
 			Authorization: `Token ${token}`,
 		},

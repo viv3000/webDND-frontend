@@ -1,15 +1,18 @@
-import React, {useState, useEffect} from 'react'
-
-import {useNavigate} from 'react-router-dom'
+import React, {useState, useEffect, Redirect} from 'react'
 
 import {getGameClass, getRaceClass, getBackgrounds, getAlignments} from '../api/gets.js'
-import addPerson from '../api/addPerson.js'
+import getPerson from '../api/getPerson.js'
+import updatePerson from '../api/updatePerson.js'
+import deletePerson from '../api/deletePerson.js'
+import {server} from '../api/settings.js'
+
+import {useParams, redirect, useNavigate} from 'react-router-dom'
 
 import {errorAlert, successAlert} from '../alert.js'
 
 import {TextInputRequired, CharacteristicInputRequired, Dropdown, TextAreaInputRequired, ImgInput} from '../Forms/Elements.jsx'
 
-import styles from './Add.module.css'
+import styles from './Update.module.css'
 
 let createDisclousureApiDictLambda = (getApi, setFunc) => {
 	return ()=>{
@@ -34,36 +37,36 @@ let Characteristics = ({
 	return(
 		<div className={styles.bodyCharacteristicsGridWrapper}>
 			<CharacteristicInputRequired 
-					defaultValue={strength} text="Сила"
+					state={strength} text="Сила"
 					name="strength"
 					setFunc={setStrength}
 					className={styles.num} />
 			<CharacteristicInputRequired
-					defaultValue={dexterity} 
+					state={dexterity} 
 					text="Ловкость"
 					name="dexterity"
 					setFunc={setDexterity}
 					className={styles.num} />
 			<CharacteristicInputRequired
-					defaultValue={constitution} 
+					state={constitution} 
 					text="Телосложение"
 					name="constitution"
 					setFunc={setConstitution}
 					className={styles.num} />
 			<CharacteristicInputRequired
-					defaultValue={intelegency}
+					state={intelegency}
 					text="Интелект"
 					name="intelegency"
 					setFunc={setIntelegency}
 					className={styles.num} />
 			<CharacteristicInputRequired 
-					defaultValue={wisdom}
+					state={wisdom}
 					text="Мудрость"
 					name="wisdom"
 					setFunc={setWisdom}
 					className={styles.num} />
 			<CharacteristicInputRequired
-					defaultValue={charisma}
+					state={charisma}
 					text="Харизма"
 					name="charisma"
 					setFunc={setCharisma}
@@ -75,10 +78,10 @@ let Characteristics = ({
 export default ({token}) => {
 	const [name, setName] = useState()
 	const [description, setDescription] = useState()
-	const [race, setRace] = useState(null)
-	const [gameClass, setGameClass] = useState(null)
-	const [background, setBackground] = useState(null)
-	const [alignment, setAlignment] = useState(null)
+	const [race, setRace] = useState()
+	const [gameClass, setGameClass] = useState()
+	const [background, setBackground] = useState()
+	const [alignment, setAlignment] = useState()
 
 	const [strength,     setStrength]     = useState(8)
 	const [dexterity,    setDexterity]    = useState(8)
@@ -89,16 +92,38 @@ export default ({token}) => {
 
 	const [img, setImg] = useState(null)
 
+	let param = useParams()
+
+	useEffect(_ => {
+		getPerson(token, param.personId).then(d => {
+			let data = d[0]
+			setName(data.name)
+			setDescription(data.description)
+			setRace(data.gameRace)
+			setGameClass(data.gameClassMain)
+			setBackground(data.background)
+			setAlignment(data.alignment)
+			setStrength(data.strength)
+			setDexterity(data.dexterity)
+			setConstitution(data.constitution)
+			setIntelegency(data.intelegency)
+			setWisdom(data.wisdom)
+			setCharisma(data.charisma)
+			setImg(server+data.img)
+			console.log(race)
+		})
+	}, [])
+
+
 	const [gameClasses, setGameClasses] = useState([]);
 	const [gameRaces, setGameRaces] = useState([]);
 	const [backgrounds, setBackgrounds] = useState([]);
 	const [alignments, setAlignments] = useState([]);
 
-	const navigate = useNavigate();
-
 	const handleSubmit = async e => {
 		e.preventDefault()
-		addPerson(
+		updatePerson(
+			param.personId,
 			token, 
 			name, description, 
 			strength, dexterity, constitution, intelegency, wisdom, charisma, 
@@ -106,8 +131,14 @@ export default ({token}) => {
 			background,
 			alignment,
 			img
-		).then( _ => successAlert("Персонаж создан!"), navigate("../list")
+		).then( _ => {successAlert("Персонаж изменен!"); navigate("../../persons/list")}
 		).catch(e => errorAlert(e))
+	}
+	let navigate = useNavigate()
+	const deleteHandle = async e => {
+		deletePerson(token, param.personId)
+			.then(_=>{successAlert("Персонаж удален!"); navigate("../../persons/list")})
+			.catch(e=>errorAlert(e))
 	}
 
 	useEffect(createDisclousureApiDictLambda(getGameClass,   setGameClasses), [])
@@ -125,7 +156,7 @@ export default ({token}) => {
 			<form onSubmit={handleSubmit} className={styles.form}>
 				<div className={styles.gridWrapper}>
 					<div className={styles.headGridWrapper}>
-						<TextInputRequired text="Имя" name="name" setFunc={setName} className={styles.name} />
+						<TextInputRequired text="Имя" name="name" setFunc={setName} state={name} className={styles.name} />
 						<div className={styles.headerInformationGridWrapper}>
 							<Dropdown text="Класс"        dict={classDict}      setFunc={setGameClass}  state={gameClass} className={styles.gameClass} />
 							<Dropdown text="Предыстория"  dict={backgroundDict} setFunc={setBackground} state={background} className={styles.background} />
@@ -134,7 +165,7 @@ export default ({token}) => {
 						</div>
 					</div>
 					<div className={styles.bodyGridWrapper}>
-						<TextAreaInputRequired   text="Описание"     name="description"    setFunc={setDescription}  className={styles.num} />
+						<TextAreaInputRequired   text="Описание"     name="description"    setFunc={setDescription} state={description} className={styles.num} />
 						<div className={styles.bodyNoDescription}>
 							<Characteristics
 								strength={strength} dexterity={dexterity} constitution={constitution} intelegency={intelegency} wisdom={wisdom} charisma={charisma}
@@ -143,7 +174,10 @@ export default ({token}) => {
 								<ImgInput text="Изображение" name="img" setFunc={setImg} className={styles.ImgInput} />
 								{
 									img &&
+									img.path != undefined ?
 									<img src={img.path} />
+									:
+									<img src={img} />
 								}
 							</div>
 						</div>
@@ -151,7 +185,8 @@ export default ({token}) => {
 				</div>
 				<br/>
 				<br/>
-				<button type="submit">Добавить</button>
+				<button type="submit">Изменить</button>
+				<button type="button" onClick={e=>{confirm("Вы точно хотите удалить персонажа?") ? deleteHandle(e) : _}}>Удалить</button>
 			</form>
 		</>
 	)

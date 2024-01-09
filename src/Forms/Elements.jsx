@@ -28,13 +28,14 @@ let ImgInput = ({text, name, setFunc}) => {
 	)
 }
 
-let TextInput = ({text, name, setFunc}) => {
+let TextInput = ({state, text, name, setFunc}) => {
 	return (
 		<>
 			<label className={styles.inp}>
 				<input
 					type="text"
 					name={name}
+					value={state}
 					onChange={e => setFunc(e.target.value) } />
 				<span className={styles.label}>{text}</span>
 				<span className={styles.focusBg}></span>
@@ -43,12 +44,13 @@ let TextInput = ({text, name, setFunc}) => {
 	)
 }
 
-let TextAreaInputRequired = ({text, name, setFunc}) => {
+let TextAreaInputRequired = ({state, text, name, setFunc}) => {
 	return (
 		<>
 			<label className={styles.textarea}>
 				<p>{text}</p>
 				<textarea
+					value={state}
 					required
 					rows="10"
 					type="text"
@@ -59,11 +61,12 @@ let TextAreaInputRequired = ({text, name, setFunc}) => {
 	)
 }
 
-let TextInputRequired = ({text, name, setFunc}) => {
+let TextInputRequired = ({state, text, name, setFunc}) => {
 	return (
 		<>
 			<label className={styles.inp}>
 				<input
+					value={state}
 					required
 					type="text"
 					name={name}
@@ -75,16 +78,16 @@ let TextInputRequired = ({text, name, setFunc}) => {
 	)
 }
 
-let CharacteristicInputRequired = ({text, name, defaultValue, setFunc}) => {
+let CharacteristicInputRequired = ({state, text, name, setFunc}) => {
 	const [value, setValue] = useState();
 	return (
 		<>			
 			<label className={styles.inp}>
 				<input
+					value={state}
 					required
 					className={styles.inpCharacteristic}
 					name={name}
-					value={defaultValue}
 					onKeyDown={(event) => {
 						if (!/[0-9]/.test(event.key)  && event.key!="Backspace" && event.key!="Tab") event.preventDefault();
 						else if ((parseInt(value*10) + parseInt(event.key)) > 20) event.preventDefault();
@@ -100,14 +103,25 @@ let CharacteristicInputRequired = ({text, name, defaultValue, setFunc}) => {
 	)
 }
 
-let Dropdown = ({text, dict, setFunc}) => {
-	if (dict[0] != undefined)
+let Dropdown = ({state, dict, setFunc}) => {
+	if (dict[0] == undefined) return (<select></select>)
+	if (state == null){
 		setFunc(dict[0].key);
+		return (<select></select>)
+	}
 	return (
 		<div className={styles.inp}>
-			<select onChange={e => setFunc(e.target.value)}>
+			<select value={state} onChange={e => setFunc(e.target.value)}>
 				{
 					dict.map(value => 
+						parseInt(value.key) == state ?
+						<option 
+							selected
+							key={value.key}
+							value={value.key}
+							title={value.description}
+						>{value.text}</option>
+						:
 						<option 
 							key={value.key}
 							value={value.key}
