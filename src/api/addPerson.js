@@ -1,4 +1,5 @@
 import {server} from './settings.js'
+import axios from "axios";
 
 export default async (
 	token, 
@@ -8,23 +9,30 @@ export default async (
 	background = null, 
 	alignment = null, 
 	img = null ) => {
-	let optioanalData = `${background == null ? '' : `&background=${background}`}${alignment == null ? '' : `&alignment=${alignment}`}${img == null ? '' : `&img=${img}`}`
-	console.log(`
-fetch('http://192.168.0.25:8000/api/CharLists/Add', {
+
+	let data = new FormData();
+	data.append("name", name)
+	data.append("description", description)
+	data.append("strength", strength)
+	data.append("dexterity", dexterity)
+	data.append("constitution", constitution)
+	data.append("intelegency", intelegency)
+	data.append("wisdom", wisdom)
+	data.append("charisma", charisma)
+	data.append("gameClassMain", gameClassMain)
+	data.append("gameRace", gameRace)
+	background && data.append("background", background)
+	alignment && data.append("alignment", alignment)
+	img.data && data.append("img", img.data)
+
+	return axios({
 		method: 'POST',
+		url: `${server}/api/CharLists/Add`,
 		headers: {
-			'Authorization': 'Token ${token}',
-			'Content-Type': 'application/x-www-form-urlencoded'
+			Authorization: `Token ${token}`,
 		},
-		body: 'name=${name}&description=${description}&strength=${strength}&dexterity=${dexterity}&constitution=${constitution}&intelegency=${intelegency}&wisdom=${wisdom}&charisma=${charisma}&gameClassMain=${gameClassMain}&gameRace=${gameRace}${optioanalData}'
-`
-	);
-	return fetch('http://192.168.0.25:8000/api/CharLists/Add', {
-		method: 'POST',
-		headers: {
-			'Authorization': `Token ${token}`,
-			'Content-Type': 'application/x-www-form-urlencoded'
-		},
-		body: `name=${name}&description=${description}&strength=${strength}&dexterity=${dexterity}&constitution=${constitution}&intelegency=${intelegency}&wisdom=${wisdom}&charisma=${charisma}&gameClassMain=${gameClassMain}&gameRace=${gameRace}${optioanalData}`
-	}).then(data => data.json());
+		data
+	}).then(response => response.json)
 }
+
+

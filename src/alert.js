@@ -1,4 +1,5 @@
 let successAlert = (message) => {
+	alert(message);
 }
 
 let errorAlert = (message) => {

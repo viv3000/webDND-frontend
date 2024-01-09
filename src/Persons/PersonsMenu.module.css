@@ -1,15 +1,38 @@
-.MenuItem{
-	float: left;
-	color: #f2f2f2;
-	text-align: center;
-	padding: 14px 16px;
-	text-decoration: none;
-	font-size: 17px;
-	width: 140px;
+	.MenuItem{
+		float: left;
+		color: #f2f2f2;
+		text-align: center;
+		text-decoration: none;
+		font-size: 17px;
+		height: 100%
+	}
+	.MenuItem:hover{
+		background-color: #ddd;
+		color: black;
+	}
+
+
+@media (min-width: 0){
+	.MenuItem{
+		width: 100%;
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
 }
 
-.MenuItem:hover{
-	background-color: #ddd;
-	color: black;
-}
+@media (min-width: 800px){
+	.MenuItem{
+		float: left;
+		color: #f2f2f2;
+		text-align: center;
+		text-decoration: none;
+		font-size: 17px;
+		width: 140px;
+		height: 100%
+	}
 
+	.MenuItem:hover{
+		background-color: #ddd;
+		color: black;
+	}
+}

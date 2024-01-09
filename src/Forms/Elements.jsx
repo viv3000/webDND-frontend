@@ -4,18 +4,30 @@ import styles from './elements.module.css'
 import InputNumber from 'react-input-number'
 
 let ImgInput = ({text, name, setFunc}) => {
+	let img = {value:null, file:null, data:null};
 	return (
 		<>
 			<label>
 				<p>{text}</p>
-				<input
+				<input 
+					enctype="multipart/form-data"
 					type="file"
 					name={name}
-					onChange={e => setFunc(URL.createObjectURL(e.target.files[0]))} />
+					onChange={e => {
+						let FR = new FileReader();
+						FR.addEventListener("load", function(evt) {
+							img.data = e.target.files[0];
+							img.file = evt.target.result
+							img.path = URL.createObjectURL(e.target.files[0])
+							setFunc(img)
+						})
+						FR.readAsDataURL(e.target.files[0])
+					}} />
 			</label>
 		</>
 	)
 }
+
 let TextInput = ({text, name, setFunc}) => {
 	return (
 		<>
@@ -23,7 +35,7 @@ let TextInput = ({text, name, setFunc}) => {
 				<input
 					type="text"
 					name={name}
-					onChange={e => setFunc(e.target.value)} />
+					onChange={e => setFunc(e.target.value) } />
 				<span className={styles.label}>{text}</span>
 				<span className={styles.focusBg}></span>
 			</label>
@@ -74,7 +86,6 @@ let CharacteristicInputRequired = ({text, name, defaultValue, setFunc}) => {
 					name={name}
 					value={defaultValue}
 					onKeyDown={(event) => {
-						console.log(parseInt(value*10) + parseInt(event.key))
 						if (!/[0-9]/.test(event.key)  && event.key!="Backspace" && event.key!="Tab") event.preventDefault();
 						else if ((parseInt(value*10) + parseInt(event.key)) > 20) event.preventDefault();
 					}}

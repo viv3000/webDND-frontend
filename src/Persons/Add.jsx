@@ -102,19 +102,14 @@ export default ({token}) => {
 			background,
 			alignment,
 			img
-		).then(e=>{
-			if(e.ok=='False'){
-				errorAlert("Что то пошло не так!\nОбратитесь к богу!")
-			}else{
-				successAlert("Персонаж создан!")
-			}
-		})
+		).then( _ => successAlert("Персонаж создан!")
+		).catch(e => errorAlert(e))
 	}
 
-	useEffect(createDisclousureApiDictLambda(getGameClass, setGameClasses),[])
-	useEffect(createDisclousureApiDictLambda(getRaceClass, setGameRaces),[])
-	useEffect(createDisclousureApiDictLambda(getBackgrounds, setBackgrounds),[])
-	useEffect(createDisclousureApiDictLambda(getAlignments, setAlignments),[])
+	useEffect(createDisclousureApiDictLambda(getGameClass,   setGameClasses), [])
+	useEffect(createDisclousureApiDictLambda(getRaceClass,   setGameRaces),   [])
+	useEffect(createDisclousureApiDictLambda(getBackgrounds, setBackgrounds), [])
+	useEffect(createDisclousureApiDictLambda(getAlignments,  setAlignments),  [])
 
 	let classDict      = gameClasses
 	let raceDict       = gameRaces
@@ -144,7 +139,7 @@ export default ({token}) => {
 								<ImgInput text="Изображение" name="img" setFunc={setImg} className={styles.ImgInput} />
 								{
 									img &&
-									<img src={img} />
+									<img src={img.path} />
 								}
 							</div>
 						</div>

@@ -2,6 +2,7 @@ import React from 'react'
 import {Link} from "react-router-dom"
 
 import styles from './Head.module.css'
+import dndDice from './assets/dnd-dice.svg'
 
 
 var MenuItem = ({path, text}) => {
@@ -48,9 +49,9 @@ export default ({token}) => {
 
 	return(
 		<div className={styles.Head}>
-			<Link to="/"><h1>Web--DnD</h1></Link>
+			<Link to="/"><img src={dndDice} width="100" height="100" alt="Web--DnD" /></Link>
+			<div></div>
 			<Topnav token={token}/>
-
 		</div>
 	)
 }

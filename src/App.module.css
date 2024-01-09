@@ -1,12 +1,14 @@
-.Body{
-	width: 100%;
-	padding: 0;
-	margin: 0;
+@media (min-width: 800px){
+	.Body{
+		width: 100%;
+		padding: 0;
+		margin: 0;
 
-	display: flex;
-	flex-direction: column;
-}
+		display: flex;
+		flex-direction: column;
+	}
 
-.Head{
-	display: flex;
+	.Head{
+		display: flex;
+	}
 }

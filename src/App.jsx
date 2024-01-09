@@ -14,7 +14,6 @@ import styles from './App.module.css'
 
 export default () => {
 	const [token, setToken] = useState("178e57618f4d94940b7a9772377ea192d021fe0a")
-	useEffect(() => { }, [])
 
 	return (
 		<>

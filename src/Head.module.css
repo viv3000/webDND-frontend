@@ -1,27 +1,34 @@
-.Head{
-	background-color: #333;
-	overflow: hidden;
-}
+@media (min-width: 0){
+	.Head{
+		background-color: #333;
+		width: 100%;
+		height: 100%;
+		display: grid;
+		grid-template-columns: 100px 1fr 140px;
+	}
 
-.TopMenu{
+	.MenuItem{
+		float: left;
+		color: #f2f2f2;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+		font-size: 17px;
+	}
 
-}
+	.MenuItem:hover{
+		background-color: #ddd;
+		color: black;
+	}
 
-.MenuItem{
-	float: left;
-	color: #f2f2f2;
-	text-align: center;
-	padding: 14px 16px;
-	text-decoration: none;
-	font-size: 17px;
-}
+	.TopMenu{
+		display: flex;
+		flex-direction: column;
+	}
 
-.MenuItem:hover{
-	background-color: #ddd;
-	color: black;
-}
-
-.MainMenuItem{
-	background-color: #04AA6D;
-	color: white;
+	.MainMenuItem{
+		display: none;
+		background-color: #04AA6D;
+		color: white;
+	}
 }

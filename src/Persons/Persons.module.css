@@ -1,15 +1,23 @@
-.Persons{
-	display: flex;
-	flex-diection: row;
-}
-
-.content{
-	background: white;
-	color: black;
-	padding: 10px;
-	margin-right: 50px;
-}
-
 .Menu{
-	width: 140px;
+	background: #444;
+}
+@media (min-width: 0px){
+	.Menu{
+		background: #444;
+		width: 100%;
+		height: min-content;
+	}
+
+	.Persons{
+		display: grid;
+		grid-template-rows: auto 1fr;
+		width: 100%;
+		margin-right: 50px;
+	}
+
+	.content{
+		margin: 10px;
+		background: white;
+		color: black;
+	}
 }
