@@ -2,12 +2,12 @@ import React, {useState, useEffect} from 'react'
 
 import {useNavigate} from 'react-router-dom'
 
-import {getGameClass, getRaceClass, getBackgrounds, getAlignments} from '../api/gets.js'
+import {getGameClasses, getGameRaces, getBackgrounds, getAlignments} from '../api/gets.js'
 import addPerson from '../api/addPerson.js'
 
 import {errorAlert, successAlert} from '../alert.js'
 
-import {TextInputRequired, CharacteristicInputRequired, Dropdown, TextAreaInputRequired, ImgInput} from '../Forms/Elements.jsx'
+import {TextInputRequired, CharacteristicInputRequired, Dropdown, TextAreaInputRequired, ImgInput, CharacteristicsHardInput} from '../Forms/Elements.jsx'
 
 import styles from './Add.module.css'
 
@@ -25,6 +25,54 @@ let createDisclousureApiDictLambda = (getApi, setFunc) => {
 			setFunc(dict)
 		})
 	}
+}
+
+let Characteristics2 = ({
+	strength, dexterity, constitution, intelegency, wisdom, charisma,
+	setStrength, setDexterity, setConstitution, setIntelegency, setWisdom, setCharisma
+}) => {
+	const [score, setScore] = useState(27);
+
+	return (
+		<>
+			<CharacteristicsHardInput
+				text="Сила"
+				name="strength"
+				score={score} setScore={setScore}
+				char={strength} setChar={setStrength} />
+			<CharacteristicsHardInput
+				text="Ловкость"
+				name="dexterity"
+				score={score} setScore={setScore}
+				char={dexterity} setChar={setDexterity}
+				className={styles.num} />
+			<CharacteristicsHardInput
+				text="Телосложение"
+				name="constitution"
+				score={score} setScore={setScore}
+				char={constitution} setChar={setConstitution}
+				className={styles.num} />
+			<CharacteristicsHardInput
+				text="Интелект"
+				name="intelegency"
+				score={score} setScore={setScore}
+				char={intelegency} setChar={setIntelegency}
+				className={styles.num} />
+			<CharacteristicsHardInput
+				text="Мудрость"
+				name="wisdom"
+				score={score} setScore={setScore}
+				char={wisdom} setChar={setWisdom}
+				className={styles.num} />
+			<CharacteristicsHardInput
+				text="Харизма"
+				name="charisma"
+				score={score} setScore={setScore}
+				char={charisma} setChar={setCharisma}
+				className={styles.num} />
+			<p>{score}</p>
+		</>
+	)
 }
 
 let Characteristics = ({
@@ -110,15 +158,15 @@ export default ({token}) => {
 		).catch(e => errorAlert(e))
 	}
 
-	useEffect(createDisclousureApiDictLambda(getGameClass,   setGameClasses), [])
-	useEffect(createDisclousureApiDictLambda(getRaceClass,   setGameRaces),   [])
+	useEffect(createDisclousureApiDictLambda(getGameClasses, setGameClasses), [])
+	useEffect(createDisclousureApiDictLambda(getGameRaces,   setGameRaces),   [])
 	useEffect(createDisclousureApiDictLambda(getBackgrounds, setBackgrounds), [])
 	useEffect(createDisclousureApiDictLambda(getAlignments,  setAlignments),  [])
 
 	let classDict      = gameClasses
 	let raceDict       = gameRaces
 	let backgroundDict = backgrounds
-	let alignmentsDict = alignments
+	let alignmentDict  = alignments
 
 	return (
 		<>
@@ -130,13 +178,13 @@ export default ({token}) => {
 							<Dropdown text="Класс"        dict={classDict}      setFunc={setGameClass}  state={gameClass} className={styles.gameClass} />
 							<Dropdown text="Предыстория"  dict={backgroundDict} setFunc={setBackground} state={background} className={styles.background} />
 							<Dropdown text="Раса"         dict={raceDict}       setFunc={setRace}       state={race} className={styles.race} />
-							<Dropdown text="Мировозрение" dict={alignmentsDict} setFunc={setAlignment}  state={alignment} className={styles.alignment} />
+							<Dropdown text="Мировозрение" dict={alignmentDict} setFunc={setAlignment}  state={alignment} className={styles.alignment} />
 						</div>
 					</div>
 					<div className={styles.bodyGridWrapper}>
 						<TextAreaInputRequired   text="Описание"     name="description"    setFunc={setDescription}  className={styles.num} />
 						<div className={styles.bodyNoDescription}>
-							<Characteristics
+							<Characteristics2
 								strength={strength} dexterity={dexterity} constitution={constitution} intelegency={intelegency} wisdom={wisdom} charisma={charisma}
 								setStrength={setStrength} setDexterity={setDexterity} setConstitution={setConstitution} setIntelegency={setIntelegency} setWisdom={setWisdom} setCharisma={setCharisma} />
 							<div className={styles.Img}>

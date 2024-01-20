@@ -90,7 +90,7 @@ let CharacteristicInputRequired = ({state, text, name, setFunc}) => {
 					name={name}
 					onKeyDown={(event) => {
 						if (!/[0-9]/.test(event.key)  && event.key!="Backspace" && event.key!="Tab") event.preventDefault();
-						else if ((parseInt(value*10) + parseInt(event.key)) > 20) event.preventDefault();
+						else if ((parseInt(value*10) + parseInt(event.key)) > 30) event.preventDefault();
 					}}
 					onChange={e => {
 						setFunc(e.target.value) 
@@ -99,6 +99,76 @@ let CharacteristicInputRequired = ({state, text, name, setFunc}) => {
 				<span className={styles.label}>{text}</span>
 				<span className={styles.focusBg}></span>
 			</label>
+		</>
+	)
+}
+
+let CharacteristicsHardInput = ({text, name, score, setScore, char, setChar}) => {
+	let getStep = (ball, positive) => {
+		if (positive) {
+			if (ball >= -4 && ball <= 4) return 1;
+			else if (ball >= 5 && ball <= 10) return 2;
+			else if (ball >= 11 && ball <= 22) return 3;
+			else return 0;
+		}else {
+			if (ball >= -3 && ball <= 5) return 1;
+			else if (ball >= 6 && ball <= 11) return 2;
+			else if (ball >= 12 && ball <= 23) return 3;
+			else return 0;
+		} 
+	}	
+
+	let minus = () => {
+		let ball = numToBall(char);
+		let step = getStep(ball, false);
+		step == 0 ? alert("Минимальное значение 4, максимальное 20") 
+			:
+		(
+			setScore(score+step),
+			ball -= step,
+			setChar(ballToNum(ball))
+		)
+	}
+	let plus = () => {
+		let ball = numToBall(char);
+		let step = getStep(ball, true);
+		step == 0 ? alert("Минимальное значение 4, максимальное 20") 
+			: 
+		score-step >= 0 ?
+		(
+			setScore(score-step),
+			ball += step,
+			setChar(ballToNum(ball))
+		)
+		:
+			alert("Не хватает баллов!")
+		console.log("step: "+step+"score: "+score+"ball: "+ball+"char: "+ballToNum(ball))
+	}
+	let ballToNum = (ball)  => {
+		return ([
+			4, 5, 6, 7, 
+			8, 9, 10, 11, 12, 13, null, 14, null, 15, null, 
+			16, null, null, 17, null, null, 18, null, null, 19, null, null, 20])[ball+4];
+	}
+
+	let numToBall = (num)  => {
+		return ({
+			4: -4, 5: -3, 6: -2, 7: -1, 
+			8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9, 
+			16: 11, 17: 14, 18: 17, 19: 20, 20: 23 })[num]
+	}
+
+
+	return (
+		<>
+			<div>
+				<label>
+					<p>{text}</p>
+					<input name={name} readOnly required type="number" value={char}/>
+					<button type="button" onClick={_=>{minus()}}>-</button>
+					<button type="button" onClick={_=>{plus() }}>+</button>
+				</label>
+			</div>
 		</>
 	)
 }
@@ -136,4 +206,4 @@ let Dropdown = ({state, dict, setFunc}) => {
 }
 
 
-export {TextInput, TextInputRequired, CharacteristicInputRequired, Dropdown, TextAreaInputRequired, ImgInput}
+export {TextInput, TextInputRequired, CharacteristicInputRequired, Dropdown, TextAreaInputRequired, ImgInput, CharacteristicsHardInput}

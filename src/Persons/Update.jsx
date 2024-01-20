@@ -1,6 +1,6 @@
 import React, {useState, useEffect, Redirect} from 'react'
 
-import {getGameClass, getRaceClass, getBackgrounds, getAlignments} from '../api/gets.js'
+import {getGameClasses, getGameRaces, getBackgrounds, getAlignments} from '../api/gets.js'
 import getPerson from '../api/getPerson.js'
 import updatePerson from '../api/updatePerson.js'
 import deletePerson from '../api/deletePerson.js'
@@ -10,7 +10,7 @@ import {useParams, redirect, useNavigate} from 'react-router-dom'
 
 import {errorAlert, successAlert} from '../alert.js'
 
-import {TextInputRequired, CharacteristicInputRequired, Dropdown, TextAreaInputRequired, ImgInput} from '../Forms/Elements.jsx'
+import {TextInputRequired, CharacteristicInputRequired, Dropdown, TextAreaInputRequired, ImgInput, CharacteristicsHardInput} from '../Forms/Elements.jsx'
 
 import styles from './Update.module.css'
 
@@ -29,6 +29,89 @@ let createDisclousureApiDictLambda = (getApi, setFunc) => {
 		})
 	}
 }
+
+let Characteristics2 = ({
+	strength, dexterity, constitution, intelegency, wisdom, charisma,
+	setStrength, setDexterity, setConstitution, setIntelegency, setWisdom, setCharisma
+}) => {
+	let ballToNum = (ball)  => {
+		return ([
+			4, 5, 6, 7, 
+			8, 9, 10, 11, 12, 13, null, 14, null, 15, null, 
+			16, null, null, 17, null, null, 18, null, null, 19, null, null, 20])[ball+4];
+	}
+
+	let numToBall = (num)  => {
+		return ({
+			4: -4, 5: -3, 6: -2, 7: -1, 
+			8: 0, 9: 1, 10: 2, 11: 3, 12: 4, 13: 5, 14: 7, 15: 9, 
+			16: 11, 17: 13, 18: 16, 19: 19, 20: 22})[num]
+	}
+
+	let callScore = (chars, baseScore) => {
+		console.log(chars);
+		console.log(numToBall(chars[0]));
+		return baseScore - (
+			numToBall(chars[0]) +
+			numToBall(chars[1]) +
+			numToBall(chars[2]) +
+			numToBall(chars[3]) +
+			numToBall(chars[4]) +
+			numToBall(chars[5])
+		)
+	}
+	const [score, setScore] = useState();
+
+	useEffect(e=>{
+		setScore(
+			callScore([
+				strength, dexterity, constitution, intelegency, wisdom, charisma
+			], 27)
+		)
+	}, [strength, dexterity, constitution, intelegency, wisdom, charisma] )
+
+	return (
+		<>
+			<CharacteristicsHardInput
+				text="Сила"
+				name="strength"
+				score={score} setScore={setScore}
+				char={strength} setChar={setStrength} />
+			<CharacteristicsHardInput
+				text="Ловкость"
+				name="dexterity"
+				score={score} setScore={setScore}
+				char={dexterity} setChar={setDexterity}
+				className={styles.num} />
+			<CharacteristicsHardInput
+				text="Телосложение"
+				name="constitution"
+				score={score} setScore={setScore}
+				char={constitution} setChar={setConstitution}
+				className={styles.num} />
+			<CharacteristicsHardInput
+				text="Интелект"
+				name="intelegency"
+				score={score} setScore={setScore}
+				char={intelegency} setChar={setIntelegency}
+				className={styles.num} />
+			<CharacteristicsHardInput
+				text="Мудрость"
+				name="wisdom"
+				score={score} setScore={setScore}
+				char={wisdom} setChar={setWisdom}
+				className={styles.num} />
+			<CharacteristicsHardInput
+				text="Харизма"
+				name="charisma"
+				score={score} setScore={setScore}
+				char={charisma} setChar={setCharisma}
+				className={styles.num} />
+			<p>{score}</p>
+		</>
+	)
+}
+
 
 let Characteristics = ({
 	strength, dexterity, constitution, intelegency, wisdom, charisma,
@@ -110,7 +193,6 @@ export default ({token}) => {
 			setWisdom(data.wisdom)
 			setCharisma(data.charisma)
 			setImg(server+data.img)
-			console.log(race)
 		})
 	}, [])
 
@@ -141,8 +223,8 @@ export default ({token}) => {
 			.catch(e=>errorAlert(e))
 	}
 
-	useEffect(createDisclousureApiDictLambda(getGameClass,   setGameClasses), [])
-	useEffect(createDisclousureApiDictLambda(getRaceClass,   setGameRaces),   [])
+	useEffect(createDisclousureApiDictLambda(getGameClasses,   setGameClasses), [])
+	useEffect(createDisclousureApiDictLambda(getGameRaces,   setGameRaces),   [])
 	useEffect(createDisclousureApiDictLambda(getBackgrounds, setBackgrounds), [])
 	useEffect(createDisclousureApiDictLambda(getAlignments,  setAlignments),  [])
 
@@ -167,7 +249,7 @@ export default ({token}) => {
 					<div className={styles.bodyGridWrapper}>
 						<TextAreaInputRequired   text="Описание"     name="description"    setFunc={setDescription} state={description} className={styles.num} />
 						<div className={styles.bodyNoDescription}>
-							<Characteristics
+							<Characteristics2
 								strength={strength} dexterity={dexterity} constitution={constitution} intelegency={intelegency} wisdom={wisdom} charisma={charisma}
 								setStrength={setStrength} setDexterity={setDexterity} setConstitution={setConstitution} setIntelegency={setIntelegency} setWisdom={setWisdom} setCharisma={setCharisma} />
 							<div className={styles.Img}>
