@@ -11,8 +11,8 @@ Currently, two official plugins are available:
 ## For start
 
 create file src/api/settings.js :
-`
+```
 let server = "http://192.168.181.237:8000";
 
 export {server}
-`
+```
